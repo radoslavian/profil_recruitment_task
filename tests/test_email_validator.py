@@ -82,6 +82,7 @@ class EmailValidatorMiddleDomains(unittest.TestCase):
         self.assertRaises(InvalidEmailError,
                           lambda: validate_email(email_address))
 
+
 class EmailValidatorTopLevelDomain(unittest.TestCase):
     """
     The part after the last "." must be between 1 and 4 characters long,
