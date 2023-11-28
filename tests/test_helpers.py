@@ -1,6 +1,6 @@
 import unittest
 
-from utils.helpers import convert_datetime
+from utils.helpers import convert_datetime, normalize_telephone_num
 
 
 class DateTimeConverterTestCase(unittest.TestCase):
@@ -25,6 +25,37 @@ class DateTimeConverterTestCase(unittest.TestCase):
         """
         date_time = "2023/06/25 06:56:34"
         self.assertRaises(ValueError, lambda: convert_datetime(date_time))
+
+
+class TelephoneNumberConverterTestCase(unittest.TestCase):
+    expected_output = "123456789"
+
+    def test_remove_plus_country_code(self):
+        """
+        Should remove leading +48 country code.
+        """
+        input_num = "+48123456789"
+        result = normalize_telephone_num(input_num)
+        self.assertEqual(self.expected_output, result)
+
+    def test_remove_leading_zeros(self):
+        input_num = "00123456789"
+        result = normalize_telephone_num(input_num)
+        self.assertEqual(self.expected_output, result)
+
+    def test_remove_parentheses(self):
+        """
+        Should remove parentheses around country code and drop
+        subsequent space.
+        """
+        input_num = "(48) 123456789"
+        result = normalize_telephone_num(input_num)
+        self.assertEqual(self.expected_output, result)
+
+    def test_remove_spaces(self):
+        input_num = "123 456 789"
+        result = normalize_telephone_num(input_num)
+        self.assertEqual(self.expected_output, result)
 
 
 if __name__ == '__main__':
