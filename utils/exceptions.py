@@ -1,6 +1,6 @@
-class InvalidRecordError(ValueError):
+class InvalidInputError(ValueError):
     pass
 
 
-class InvalidEmailError(InvalidRecordError):
+class InvalidEmailError(InvalidInputError):
     pass
