@@ -1,6 +1,9 @@
 import unittest
 
+from sqlalchemy.exc import IntegrityError
+
 from database.models import User, start_engine, drop_all, Role, Child
+from utils.exceptions import InvalidEmailError
 from utils.helpers import convert_datetime
 
 
@@ -34,6 +37,39 @@ class UserRoleTestCase(DatabaseTestCaseAbs):
         )
         self.session.add(user)
         self.session.commit()
+
+    def test_user_email_validation(self):
+        """
+        User instance shouldn't accept invalid email address.
+        """
+        invalid_email = "@host.com"
+
+        def raise_error():
+            user = User(
+                email=invalid_email,
+                firstname="Patricia",
+                telephone_number="013112467",
+                created_at=self.created_at
+            )
+            self.session.add(user)
+            self.session.commit()
+
+        self.assertRaises(InvalidEmailError, raise_error)
+
+    def test_no_email(self):
+        """
+        Creating a user instance should fail if no email is given.
+        """
+        def raise_error():
+            user = User(
+                firstname="Patricia",
+                telephone_number="013112467",
+                created_at=self.created_at
+            )
+            self.session.add(user)
+            self.session.commit()
+
+        self.assertRaises(IntegrityError, raise_error)
 
     def test_user_valid_data(self):
         """

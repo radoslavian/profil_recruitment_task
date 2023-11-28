@@ -1,6 +1,9 @@
-from sqlalchemy.orm import declarative_base, sessionmaker, relationship
+from sqlalchemy.orm import declarative_base, sessionmaker, relationship, \
+    validates
 from sqlalchemy import (create_engine, Column, String, Integer, Boolean,
                         DateTime, ForeignKey)
+
+from utils.email_validator import validate_email
 
 Base = declarative_base()
 
@@ -31,7 +34,8 @@ class Role(Base):
 class User(Base):
     __tablename__ = "users"
 
-    email = Column(String(320), unique=True, primary_key=True)
+    email = Column(String(320), unique=True, primary_key=True,
+                   nullable=False)
     firstname = Column(String(128), nullable=False)
     role_id = Column(Integer, ForeignKey("roles.role_id"))
     telephone_number = Column(String(9), unique=True, index=True,
@@ -41,6 +45,10 @@ class User(Base):
     # hash will be generated using hashlib.sha256().hexdigest
     password_hash = Column(String(64))
     created_at = Column(DateTime, nullable=False)
+
+    @validates("email")
+    def validate_email(self, key, email):
+        return validate_email(email) and email
 
 
 class Child(Base):
