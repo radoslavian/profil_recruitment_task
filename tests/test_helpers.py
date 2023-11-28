@@ -12,12 +12,12 @@ class DateTimeConverterTestCase(unittest.TestCase):
         date_time = "2023-06-25 06:56:34"
         converted_date_time = convert_datetime(date_time)
 
-        self.assertEqual(converted_date_time.year, 2023)
-        self.assertEqual(converted_date_time.month, 6)
-        self.assertEqual(converted_date_time.day, 25)
-        self.assertEqual(converted_date_time.hour, 6)
-        self.assertEqual(converted_date_time.minute, 56)
-        self.assertEqual(converted_date_time.second, 34)
+        self.assertEqual(2023, converted_date_time.year)
+        self.assertEqual(6, converted_date_time.month)
+        self.assertEqual(25, converted_date_time.day)
+        self.assertEqual(6, converted_date_time.hour)
+        self.assertEqual(56, converted_date_time.minute)
+        self.assertEqual(34, converted_date_time.second)
 
     def test_malformed_argument(self):
         """
