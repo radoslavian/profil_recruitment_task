@@ -11,6 +11,10 @@
                 <name>Anna</name>
                 <age>18</age>
             </child>
+            <child>
+                <name>James</name>
+                <age>17</age>
+            </child>
         </children>
     </user>
     <user>
