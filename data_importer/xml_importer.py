@@ -14,8 +14,9 @@ class XMLImporter(DataImporter):
             output.append(child_data)
         return output
 
-    def convert_data(self):
-        users = ET.fromstring(self.filedata)
+    def import_from_file(self, file):
+        tree = ET.parse(file)
+        users = tree.getroot()
         output = []
         for user in users:
             data = {}

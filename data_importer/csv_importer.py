@@ -31,7 +31,6 @@ class CSVImporter(DataImporter):
             rows.append(row)
         self.converted_data = rows
 
-    def load_data(self, filename):
-        with open(filename, "r") as csv_file:
-            reader = DictReader(csv_file, delimiter=";")
-            self._read_rows(reader)
+    def import_from_file(self, file):
+        reader = DictReader(file, delimiter=";")
+        self._read_rows(reader)

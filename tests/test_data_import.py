@@ -6,8 +6,15 @@ from data_importer.xml_importer import XMLImporter
 
 
 class DataImporterTestCaseAbs:
+    Importer = None
     importer = None
     user_data = None
+
+    @classmethod
+    def setup_importer(cls, test_data_path):
+        cls.importer = cls.Importer(test_data_path)
+        if cls.importer.is_loaded:
+            cls.user_data = cls.importer.get_data()
 
     def test_imported_data_types(self):
         """
@@ -21,6 +28,14 @@ class DataImporterTestCaseAbs:
         Test data contains two entries.
         """
         self.assertEqual(len(self.user_data), 2)
+
+    def test_successful_import(self):
+        self.assertTrue(self.importer.is_loaded)
+
+    def test_import_fail(self):
+        importer = self.Importer("/wrong/path/to/file")
+        self.assertFalse(importer.is_loaded)
+        self.assertIn("No such file or directory", importer.fail_reason)
 
     def test_example_data(self):
         expected_output = {
@@ -45,24 +60,27 @@ class DataImporterTestCaseAbs:
 
 
 class JsonImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
+    Importer = JsonImporter
+
     @classmethod
     def setUpClass(cls):
-        cls.importer = JsonImporter("./test_data/users.json")
-        cls.user_data = cls.importer.get_data()
+        cls.setup_importer("./test_data/users.json")
 
 
 class XMLImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
+    Importer = XMLImporter
+
     @classmethod
     def setUpClass(cls):
-        cls.importer = XMLImporter("./test_data/users.xml")
-        cls.user_data = cls.importer.get_data()
+        cls.setup_importer("./test_data/users.xml")
 
 
 class CSVImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
+    Importer = CSVImporter
+
     @classmethod
     def setUpClass(cls):
-        cls.importer = CSVImporter("./test_data/users.csv")
-        cls.user_data = cls.importer.get_data()
+        cls.setup_importer("./test_data/users.csv")
 
 
 if __name__ == '__main__':

@@ -4,5 +4,5 @@ from data_importer.data_importer import DataImporter
 
 
 class JsonImporter(DataImporter):
-    def convert_data(self):
-        self.converted_data = json.loads(self.filedata)
+    def import_from_file(self, file):
+        self.converted_data = json.load(file)

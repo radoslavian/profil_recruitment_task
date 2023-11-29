@@ -5,19 +5,30 @@ class DataImporter:
     def __init__(self, filename):
         self.filedata = None
         self.converted_data = None
-        self.load_data(filename)
+        self.is_loaded = False
+        self.fail_reason = ""
+        self.handle_errors_on_loading(filename)
+
+    def handle_errors_on_loading(self, filename):
+        """
+        Handles possible errors while loading data.
+        """
+        try:
+            self.load_data(filename)
+        except FileNotFoundError as e:
+            self.fail_reason = str(e)
+        else:
+            self.is_loaded = True
 
     def load_data(self, filename):
         with open(filename, "r") as file:
-            self.filedata = file.read()
+            self.import_from_file(file)
 
-    def convert_data(self):
+    def import_from_file(self, file):
         """
-        Convert loaded data into Python dict.
+        Import data from file into Python dict.
         """
         pass
 
     def get_data(self):
-        if not self.converted_data:
-            self.convert_data()
         return self.converted_data
