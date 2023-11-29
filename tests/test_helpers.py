@@ -1,6 +1,7 @@
 import unittest
 
-from utils.helpers import convert_datetime, normalize_telephone_num
+from utils.helpers import convert_datetime, normalize_telephone_num, \
+    list_files_for_import, get_file_extension
 
 
 class DateTimeConverterTestCase(unittest.TestCase):
@@ -56,6 +57,30 @@ class TelephoneNumberConverterTestCase(unittest.TestCase):
         input_num = "123 456 789"
         result = normalize_telephone_num(input_num)
         self.assertEqual(self.expected_output, result)
+
+
+class FileUtilsTestCase(unittest.TestCase):
+    def test_getting_file_extension(self):
+        file = "/home/user/filename.txt"
+        result = get_file_extension(file)
+
+        self.assertEqual(".txt", result)
+        self.assertEqual(".png", get_file_extension("file.png"))
+
+    def test_listing_files(self):
+        """
+        Listing files for import.
+        """
+        expected_output = {
+            "test_data/a/c/file3.json",
+            "test_data/a/b/file2.cvs",
+            "test_data/a/file1.xml"
+        }
+        file_extensions = [".cvs", ".xml", ".json"]
+        output = list_files_for_import("test_data/a", file_extensions)
+
+        self.assertEqual(len(output), 3)
+        self.assertSetEqual(expected_output, set(output))
 
 
 if __name__ == '__main__':
