@@ -1,10 +1,11 @@
 import unittest
 
 from data_importer.json_importer import JsonImporter
+from data_importer.xml_importer import XMLImporter
 
 
 class DataImporterTestCaseAbs:
-    json_importer = None
+    importer = None
     user_data = None
 
     def test_imported_data_types(self):
@@ -41,8 +42,15 @@ class DataImporterTestCaseAbs:
 class JsonImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
     @classmethod
     def setUpClass(cls):
-        cls.json_importer = JsonImporter("./test_data/users.json")
-        cls.user_data = cls.json_importer.get_data()
+        cls.importer = JsonImporter("./test_data/users.json")
+        cls.user_data = cls.importer.get_data()
+
+
+class XMLImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
+    @classmethod
+    def setUpClass(cls):
+        cls.importer = XMLImporter("./test_data/users.xml")
+        cls.user_data = cls.importer.get_data()
 
 
 if __name__ == '__main__':
