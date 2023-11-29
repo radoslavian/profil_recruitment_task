@@ -1,5 +1,6 @@
 import unittest
 
+from data_importer.csv_importer import CSVImporter
 from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
 
@@ -33,6 +34,10 @@ class DataImporterTestCaseAbs:
                 {
                     "name": "Anna",
                     "age": 18
+                },
+                {
+                    "name": "James",
+                    "age": 17
                 }
             ]
         }
@@ -50,6 +55,13 @@ class XMLImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
     @classmethod
     def setUpClass(cls):
         cls.importer = XMLImporter("./test_data/users.xml")
+        cls.user_data = cls.importer.get_data()
+
+
+class CSVImporterTestCase(unittest.TestCase, DataImporterTestCaseAbs):
+    @classmethod
+    def setUpClass(cls):
+        cls.importer = CSVImporter("./test_data/users.csv")
         cls.user_data = cls.importer.get_data()
 
 
