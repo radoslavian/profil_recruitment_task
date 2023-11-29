@@ -30,5 +30,14 @@ class DataImporter:
         """
         pass
 
-    def get_data(self):
-        return self.converted_data
+    def __iter__(self):
+        self.current_iter_position = 0
+        return self
+
+    def __next__(self):
+        try:
+            user = self.converted_data[self.current_iter_position]
+        except IndexError:
+            raise StopIteration
+        self.current_iter_position += 1
+        return user

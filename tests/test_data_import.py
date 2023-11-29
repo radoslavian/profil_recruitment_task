@@ -14,7 +14,7 @@ class DataImporterTestCaseAbs:
     def setup_importer(cls, test_data_path):
         cls.importer = cls.Importer(test_data_path)
         if cls.importer.is_loaded:
-            cls.user_data = cls.importer.get_data()
+            cls.user_data = list(cls.importer)
 
     def test_imported_data_types(self):
         """
