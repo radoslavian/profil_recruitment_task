@@ -1,5 +1,5 @@
 import unittest
-from utils.email_validator import validate_email
+from utils.validators import validate_email
 from utils.exceptions import InvalidEmailError
 
 
