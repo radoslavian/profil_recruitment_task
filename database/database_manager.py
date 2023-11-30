@@ -1,3 +1,5 @@
+import sys
+
 from sqlalchemy.exc import IntegrityError
 
 from database.models import start_engine, drop_all, User, Child
@@ -63,6 +65,9 @@ class DatabaseManager:
                 self.session.rollback()
                 self._swap_users_conditionally(user)
             except InvalidInputError:
+                print("Warning: rolling back on invalid input "
+                      f"(email or phone number): user {user['firstname']}",
+                      file=sys.stderr)
                 self.session.rollback()
                 continue
 
