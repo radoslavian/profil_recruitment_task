@@ -3,7 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship, \
 from sqlalchemy import (create_engine, Column, String, Integer, Boolean,
                         DateTime, ForeignKey)
 
-from utils.email_validator import validate_email
+from utils.validators import validate_email, validate_telephone_number
 
 Base = declarative_base()
 
@@ -49,6 +49,11 @@ class User(Base):
     @validates("email")
     def validate_email(self, key, email):
         return validate_email(email) and email
+
+    @validates("telephone_number")
+    def validate_telephone_number(self, key, telephone_number):
+        return (validate_telephone_number(telephone_number)
+                and telephone_number)
 
 
 class Child(Base):
