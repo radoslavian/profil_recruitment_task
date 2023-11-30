@@ -1,5 +1,8 @@
 import unittest
 
+from data_importer.csv_importer import CSVImporter
+from data_importer.json_importer import JsonImporter
+from data_importer.xml_importer import XMLImporter
 from database.database_manager import DatabaseManager
 from database.models import User, Child, Role
 from utils.exceptions import InvalidPhoneNumberError
@@ -205,8 +208,42 @@ class RolesTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertIsNotNone(user_role)
 
 
-class LoadingDataFromFilesTestCase(DatabaseManagerSetup, unittest.TestCase):
-    pass
+class SelectingImporterTestCase(DatabaseManagerSetup, unittest.TestCase):
+    def test_selecting_csv_importer(self):
+        """
+        Should return importer for a csv file.
+        """
+        fake_file = "/path/to/the/file.csv"
+        Importer = self.database_manager.get_importer_for_file(fake_file)
+        self.assertIs(Importer, CSVImporter)
+
+    def test_selecting_json_importer(self):
+        """
+        Should return importer for a json file.
+        """
+        fake_file = "/path/to/the/file.json"
+        Importer = self.database_manager.get_importer_for_file(fake_file)
+        self.assertIs(Importer, JsonImporter)
+
+    def test_selecting_xml_importer(self):
+        """
+        Should return importer for a json file.
+        """
+        fake_file = "/path/to/the/file.xml"
+        Importer = self.database_manager.get_importer_for_file(fake_file)
+        self.assertIs(Importer, XMLImporter)
+
+    def test_selecting_importer_wrong_file_type(self):
+        """
+        Should raise ValueError on an attempt to import data from a file
+        of a different (from xml, csv, json) type.
+        """
+        fake_file = "/path/to/the/file.bin"
+
+        def import_wrong_file():
+            self.database_manager.get_importer_for_file(fake_file)
+
+        self.assertRaises(ValueError, import_wrong_file)
 
 
 if __name__ == '__main__':

@@ -2,9 +2,13 @@ import sys
 
 from sqlalchemy.exc import IntegrityError
 
+from data_importer.csv_importer import CSVImporter
+from data_importer.json_importer import JsonImporter
+from data_importer.xml_importer import XMLImporter
 from database.models import start_engine, drop_all, User, Child, Role
 from utils.exceptions import InvalidInputError, RoleNotFoundError
-from utils.helpers import convert_datetime, normalize_telephone_num
+from utils.helpers import convert_datetime, normalize_telephone_num, \
+    get_file_extension
 from utils.security import generate_password_hash
 
 
@@ -88,6 +92,26 @@ class DatabaseManager:
                       file=sys.stderr)
                 self.session.rollback()
                 continue
+
+    @staticmethod
+    def get_importer_for_file(filename):
+        """
+        :filename: filename together with path
+        :return: data importer class for a given filetype
+         (based on extension).
+        """
+        file_extension = get_file_extension(filename)
+        match file_extension:
+            case ".csv":
+                return CSVImporter
+            case ".json":
+                return JsonImporter
+            case ".xml":
+                return XMLImporter
+            case _:
+                raise ValueError(
+                    "Unknown file type: "
+                    "can only import data from csv, json or xml files.")
 
     def feed_files(self, filenames):
         """
