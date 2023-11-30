@@ -6,15 +6,15 @@
         <password>+3t)mSM6xX</password>
         <role>admin</role>
         <created_at>2022-11-25 02:19:37</created_at>
-        <children>
-            <child>
-                <name>Anna</name>
-                <age>18</age>
-            </child>
-            <child>
-                <name>James</name>
-                <age>17</age>
-            </child>
-        </children>
+        <children/>
+    </user>
+    <user>
+        <firstname>Felicia</firstname>
+        <telephone_number>(48)394426853</telephone_number>
+        <email>alicia41@</email>
+        <password>^rf3mkTt&)</password>
+        <role>user</role>
+        <created_at>2023-07-19 00:22:43</created_at>
+        <children/>
     </user>
 </users>

@@ -1,5 +1,5 @@
 from data_importer.data_importer import DataImporter
-import xml.etree.ElementTree as ET
+from lxml import etree
 
 
 class XMLImporter(DataImporter):
@@ -15,7 +15,8 @@ class XMLImporter(DataImporter):
         return output
 
     def import_from_file(self, file):
-        tree = ET.parse(file)
+        parser = etree.XMLParser(recover=True)
+        tree = etree.parse(file, parser=parser)
         users = tree.getroot()
         output = []
         for user in users:
@@ -25,7 +26,6 @@ class XMLImporter(DataImporter):
                     data[prop.tag] = self.read_children(prop)
                 else:
                     data[prop.tag] = prop.text
-
             output.append(data)
 
         self.converted_data = output
