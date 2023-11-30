@@ -288,7 +288,6 @@ class ImportingDataFromFiles(DatabaseManagerSetup, unittest.TestCase):
         files_to_import = list_files_for_import(path, extensions)
         self.database_manager.feed_files(files_to_import)
         user_query = self.session.query(User)
-
         self.assertEqual(4, user_query.count())
 
 

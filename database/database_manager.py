@@ -68,7 +68,19 @@ class DatabaseManager:
         Add a user (or keep already existing) with a newer creation date
         to the database.
         """
-        user_in_db = self.session.get(User, user["email"])
+        # this method is called if IntegrityError occurs,
+        # which (in this scenario) is raised when unique constraint
+        # fails -> so that we have to query using all fields
+        # with unique constraint imposed on them:
+        user_query = self.session.query(User)
+        normalized_tel_num = normalize_telephone_num(user["telephone_number"])
+        user_in_db = (
+                user_query.filter_by(email=user["email"]).first()
+                or
+                user_query.filter_by(
+                    telephone_number=normalized_tel_num).first()
+        )
+
         if convert_datetime(user["created_at"]) > user_in_db.created_at:
             self.session.delete(user_in_db)
             self.session.commit()
