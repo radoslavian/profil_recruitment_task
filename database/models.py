@@ -55,6 +55,10 @@ class User(Base):
         return (validate_telephone_number(telephone_number)
                 and telephone_number)
 
+    def __str__(self):
+        return (f"<User: {self.email} -- {self.telephone_number}, "
+                f"{self.created_at}>")
+
 
 class Child(Base):
     __tablename__ = "children"
