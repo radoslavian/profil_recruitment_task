@@ -56,6 +56,6 @@ class Child(Base):
 
     child_id = Column(Integer, primary_key=True, unique=True,
                       nullable=False, autoincrement=True)
-    parent_id = Column(String, ForeignKey("users.email"))
+    parent_id = Column(String, ForeignKey("users.email"), nullable=False)
     name = Column(String(128), nullable=False)
     age = Column(Integer, nullable=False, index=True)

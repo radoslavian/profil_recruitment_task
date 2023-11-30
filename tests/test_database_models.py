@@ -131,9 +131,6 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
             age=13
         )
         self.children = [child1, child2]
-        self.session.add_all(self.children)
-        self.session.commit()
-
         self.user = User(
             telephone_number="700851384",
             email="cherrera@example.com",
@@ -143,6 +140,7 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
         )
         self.session.add(self.user)
         self.session.commit()
+
 
     def test_child_valid_data(self):
         child = self.children[0]
