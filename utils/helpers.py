@@ -40,7 +40,7 @@ def list_files_for_import(path, file_extensions):
     """
     Find files with given extensions within directory.
     :param path: path relative to the working directory
-    :param file_extensions: list of extensions file, e.g.: [".txt", ".png"]
+    :param file_extensions: list of file extensions, e.g.: [".txt", ".png"]
     :return: list of relative paths (to the working directory) within
     subdirectory.
     """
