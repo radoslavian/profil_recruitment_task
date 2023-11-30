@@ -125,4 +125,5 @@ class DatabaseManager:
         """
         :param filenames: list of data filenames with paths.
         """
-        pass
+        for file in filenames:
+            self.import_data_from_file(file)

@@ -5,7 +5,7 @@ from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
 from database.database_manager import DatabaseManager
 from database.models import User, Child, Role
-from utils.helpers import convert_datetime
+from utils.helpers import convert_datetime, list_files_for_import
 from utils.security import check_password_hash
 
 
@@ -282,6 +282,14 @@ class ImportingDataFromFiles(DatabaseManagerSetup, unittest.TestCase):
         self.assertEqual("Patricia", user_patricia.firstname)
         self.assertEqual(1, self.session.query(User).count())
 
+    def test_importing_files(self):
+        path = "./test_data/a"
+        extensions = [".csv", ".xml", ".json"]
+        files_to_import = list_files_for_import(path, extensions)
+        self.database_manager.feed_files(files_to_import)
+        user_query = self.session.query(User)
+
+        self.assertEqual(4, user_query.count())
 
 
 if __name__ == '__main__':
