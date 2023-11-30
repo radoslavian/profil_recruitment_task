@@ -73,10 +73,10 @@ class FileUtilsTestCase(unittest.TestCase):
         """
         expected_output = {
             "test_data/a/c/file3.json",
-            "test_data/a/b/file2.cvs",
+            "test_data/a/b/file2.csv",
             "test_data/a/file1.xml"
         }
-        file_extensions = [".cvs", ".xml", ".json"]
+        file_extensions = [".csv", ".xml", ".json"]
         output = list_files_for_import("test_data/a", file_extensions)
 
         self.assertEqual(len(output), 3)
