@@ -2,7 +2,7 @@ import sys
 
 from sqlalchemy.exc import IntegrityError
 
-from database.models import start_engine, drop_all, User, Child
+from database.models import start_engine, drop_all, User, Child, Role
 from utils.exceptions import InvalidInputError
 from utils.helpers import convert_datetime, normalize_telephone_num
 from utils.security import generate_password_hash
@@ -14,6 +14,18 @@ class DatabaseManager:
 
     def drop_all(self):
         drop_all(self.engine)
+
+    def insert_roles(self):
+        roles = {"admin", "user"}
+        default_role = "user"
+
+        for r in roles:
+            role = self.session.query(Role).filter_by(name=r).first()
+            if role is None:
+                role = Role(name=r)
+                role.default = (role.name == default_role)
+            self.session.add(role)
+        self.session.commit()
 
     @staticmethod
     def _add_children(children, parent):

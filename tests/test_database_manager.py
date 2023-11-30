@@ -1,13 +1,23 @@
 import unittest
 
 from database.database_manager import DatabaseManager
-from database.models import User, Child
+from database.models import User, Child, Role
 from utils.exceptions import InvalidPhoneNumberError
 from utils.helpers import convert_datetime
 from utils.security import check_password_hash
 
 
-class DatabaseManagerTestCase(unittest.TestCase):
+class DatabaseManagerSetup:
+    def setUp(self):
+        self.database_manager = DatabaseManager("sqlite:///:memory:")
+        # this is needed for the greater good
+        self.session = self.database_manager.session
+
+    def tearDown(self):
+        self.database_manager.drop_all()
+
+
+class DatabaseManagerTestCase(DatabaseManagerSetup, unittest.TestCase):
     class TestData:
         user_with_children = [
             {
@@ -72,14 +82,6 @@ class DatabaseManagerTestCase(unittest.TestCase):
                 ]
             }
         ]
-
-    def setUp(self):
-        self.database_manager = DatabaseManager("sqlite:///:memory:")
-        # this is needed for the greater good
-        self.session = self.database_manager.session
-
-    def tearDown(self):
-        self.database_manager.drop_all()
 
     def test_adding_user_with_children(self):
         self.database_manager.feed_data(self.TestData.user_with_children)
@@ -170,14 +172,18 @@ class DatabaseManagerTestCase(unittest.TestCase):
         password = self.TestData.user_without_children[0]["password"]
         self.assertTrue(check_password_hash(user.password_hash, password))
 
-    # def test_user_role(self):
-    #     """
-    #     Test the "user" role.
-    #     """
-    #     pass
-    #
-    # def test_admin_role(self):
-    #     pass
+
+class DatabaseManagerRolesTestCase(DatabaseManagerSetup, unittest.TestCase):
+    def test_adding_roles(self):
+        """
+        Adding basic roles: admin and user.
+        """
+        self.database_manager.insert_roles()
+        admin_role = self.session.query(Role).filter_by(name="admin").first()
+        user_role = self.session.query(Role).filter_by(name="user").first()
+
+        self.assertIsNotNone(admin_role)
+        self.assertIsNotNone(user_role)
 
 
 if __name__ == '__main__':
