@@ -245,7 +245,7 @@ class SelectingImporterTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertRaises(ValueError, import_wrong_file)
 
 
-class ImportingDataFromFile(DatabaseManagerSetup, unittest.TestCase):
+class ImportingDataFromFiles(DatabaseManagerSetup, unittest.TestCase):
     def test_importing_from_csv(self):
         test_data_file = "./test_data/a/b/file2.csv"
         self.database_manager.import_data_from_file(test_data_file)
@@ -281,6 +281,7 @@ class ImportingDataFromFile(DatabaseManagerSetup, unittest.TestCase):
         self.assertIsNone(user_michael)
         self.assertEqual("Patricia", user_patricia.firstname)
         self.assertEqual(1, self.session.query(User).count())
+
 
 
 if __name__ == '__main__':
