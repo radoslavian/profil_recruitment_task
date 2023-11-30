@@ -113,6 +113,14 @@ class DatabaseManager:
                     "Unknown file type: "
                     "can only import data from csv, json or xml files.")
 
+    def import_data_from_file(self, filename):
+        Importer = self.get_importer_for_file(filename)
+        importer = Importer(filename)
+        if importer.is_loaded:
+            self.feed_data(importer)
+        else:
+            print(f"Import error: {importer.fail_reason}", file=sys.stderr)
+
     def feed_files(self, filenames):
         """
         :param filenames: list of data filenames with paths.

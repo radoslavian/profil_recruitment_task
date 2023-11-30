@@ -246,5 +246,31 @@ class SelectingImporterTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertRaises(ValueError, import_wrong_file)
 
 
+class ImportingDataFromFile(DatabaseManagerSetup, unittest.TestCase):
+    def test_importing_from_csv(self):
+        test_data_file = "./test_data/a/b/file2.csv"
+        self.database_manager.import_data_from_file(test_data_file)
+        user_jamie = self.session.get(User, "kcampbell@yahve.com")
+        user_carol = self.session.query(User).filter_by(
+            firstname="Carol").first()
+
+        self.assertIsNotNone(user_jamie)
+        self.assertIsNone(user_carol)
+        self.assertEqual("Jamie", user_jamie.firstname)
+        self.assertEqual(2, self.session.query(User).count())
+
+    def test_importing_from_xml(self):
+        test_data_file = "./test_data/a/file1.xml"
+        self.database_manager.import_data_from_file(test_data_file)
+        user_justin = self.session.get(User, "opoole@example.org")
+        user_felicia = self.session.query(User).filter_by(
+            firstname="Felicia").first()
+
+        self.assertIsNotNone(user_justin)
+        self.assertIsNone(user_felicia)
+        self.assertEqual("Justin", user_justin.firstname)
+        self.assertEqual(1, self.session.query(User).count())
+
+
 if __name__ == '__main__':
     unittest.main()
