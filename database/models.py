@@ -68,3 +68,6 @@ class Child(Base):
     parent_id = Column(String, ForeignKey("users.email"), nullable=False)
     name = Column(String(128), nullable=False)
     age = Column(Integer, nullable=False, index=True)
+    
+    def __str__(self):
+        return f"{self.name}, {self.age}"

@@ -141,7 +141,6 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
         self.session.add(self.user)
         self.session.commit()
 
-
     def test_child_valid_data(self):
         child = self.children[0]
         self.assertEqual("Andrew", child.name)
@@ -176,6 +175,14 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
         self.session.commit()
         self.session.refresh(self.user)
         self.assertTrue(self.user)
+
+    def test_child_serialization(self):
+        """
+        Output of the Child.__str__ method should look like this:
+        Alan, 12
+        """
+        child = self.children[0]
+        self.assertEqual(f"{child.name}, {child.age}", str(child))
 
 
 if __name__ == '__main__':
