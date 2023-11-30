@@ -1,3 +1,20 @@
 <users>
-
+    <user>
+        <firstname>Justin</firstname>
+        <telephone_number>678762794</telephone_number>
+        <email>opoole@example.org</email>
+        <password>+3t)mSM6xX</password>
+        <role>admin</role>
+        <created_at>2022-11-25 02:19:37</created_at>
+        <children>
+            <child>
+                <name>Anna</name>
+                <age>18</age>
+            </child>
+            <child>
+                <name>James</name>
+                <age>17</age>
+            </child>
+        </children>
+    </user>
 </users>
