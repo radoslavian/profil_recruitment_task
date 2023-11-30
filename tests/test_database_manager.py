@@ -2,6 +2,7 @@ import unittest
 
 from database.database_manager import DatabaseManager
 from database.models import User, Child
+from utils.exceptions import InvalidPhoneNumberError
 from utils.helpers import convert_datetime
 from utils.security import check_password_hash
 
@@ -90,6 +91,26 @@ class DatabaseManagerTestCase(unittest.TestCase):
         self.assertEqual(user.children.count(), 2)
         self.assertEqual(child.parent.email, user.email)
 
+    def test_normalized_phone_number(self):
+        self.database_manager.feed_data(self.TestData.user_without_children)
+        user = self.session.get(
+            User, self.TestData.user_without_children[0]["email"])
+        self.assertEqual("094885352", user.telephone_number)
+
+    def test_add_user_with_malformed_email(self):
+        """
+        Shouldn't add user with malformed email.
+        """
+        user_data = [
+            {
+                **self.TestData.user_without_children[0],
+                "email": "@cutHead.com"
+            }
+        ]
+        self.database_manager.feed_data(user_data)
+        user = self.session.query(User).first()
+        self.assertFalse(user)
+
     def test_adding_user_without_children(self):
         self.database_manager.feed_data(self.TestData.user_without_children)
         user_email = self.TestData.user_without_children[0]["email"]
@@ -128,6 +149,21 @@ class DatabaseManagerTestCase(unittest.TestCase):
         self.assertEqual(self.session.query(User).count(), 1)
         self.assertEqual(user.created_at, created_at)
 
+    def test_adding_user_without_telephone(self):
+        """
+        An attempt to add user entry without telephone number should
+        raise InvalidPhoneNumberError exception.
+        """
+        user_entry = [
+            {
+                **self.TestData.user_without_children[0],
+                "telephone_number": ""
+            }
+        ]
+        self.database_manager.feed_data(user_entry)
+        user = self.session.get(User, user_entry[0]["email"])
+        self.assertFalse(user)
+
     def test_password_hash(self):
         self.database_manager.feed_data(self.TestData.user_without_children)
         user = self.session.query(User).first()
@@ -142,7 +178,6 @@ class DatabaseManagerTestCase(unittest.TestCase):
     #
     # def test_admin_role(self):
     #     pass
-
 
 
 if __name__ == '__main__':

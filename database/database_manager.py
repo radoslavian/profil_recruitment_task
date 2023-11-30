@@ -1,6 +1,7 @@
 from sqlalchemy.exc import IntegrityError
 
 from database.models import start_engine, drop_all, User, Child
+from utils.exceptions import InvalidInputError
 from utils.helpers import convert_datetime, normalize_telephone_num
 from utils.security import generate_password_hash
 
@@ -61,6 +62,9 @@ class DatabaseManager:
             except IntegrityError:
                 self.session.rollback()
                 self._swap_users_conditionally(user)
+            except InvalidInputError:
+                self.session.rollback()
+                continue
 
     def feed_files(self, filenames):
         """
