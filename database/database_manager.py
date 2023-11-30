@@ -38,6 +38,17 @@ class DatabaseManager:
         self.session.add(new_user)
         self.session.commit()
 
+    def _swap_users_conditionally(self, user):
+        """
+        Add a user (or keep already existing) with a newer creation date
+        to the database.
+        """
+        user_in_db = self.session.get(User, user["email"])
+        if convert_datetime(user["created_at"]) > user_in_db.created_at:
+            self.session.delete(user_in_db)
+            self.session.commit()
+            self.add_user_with_children(user)
+
     def feed_data(self, users):
         """
         Import data into a database.
@@ -49,14 +60,7 @@ class DatabaseManager:
                 self.add_user_with_children(user)
             except IntegrityError:
                 self.session.rollback()
-                user_in_db = self.session.get(User, user["email"])
-                if (convert_datetime(user["created_at"]) >
-                        user_in_db.created_at):
-                    self.session.delete(user_in_db)
-                    self.session.commit()
-                    self.add_user_with_children(user)
-                else:
-                    continue
+                self._swap_users_conditionally(user)
 
     def feed_files(self, filenames):
         """
