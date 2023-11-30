@@ -270,6 +270,18 @@ class ImportingDataFromFile(DatabaseManagerSetup, unittest.TestCase):
         self.assertEqual("Justin", user_justin.firstname)
         self.assertEqual(1, self.session.query(User).count())
 
+    def test_importing_from_json(self):
+        test_data_file = "./test_data/a/c/file3.json"
+        self.database_manager.import_data_from_file(test_data_file)
+        user_patricia = self.session.get(User, "woodsjerry@example.com")
+        user_michael = self.session.query(User).filter_by(
+            firstname="Michael").first()
+
+        self.assertIsNotNone(user_patricia)
+        self.assertIsNone(user_michael)
+        self.assertEqual("Patricia", user_patricia.firstname)
+        self.assertEqual(1, self.session.query(User).count())
+
 
 if __name__ == '__main__':
     unittest.main()

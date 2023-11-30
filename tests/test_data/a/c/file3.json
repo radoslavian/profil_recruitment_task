@@ -1,11 +1,20 @@
 [
   {
     "firstname": "Patricia",
-    "telephone_number": "823816375",
+    "telephone_number": "(48)823816375",
     "email": "woodsjerry@example.com",
     "password": "z2Y%0Hbcsi",
     "role": "user",
     "created_at": "2023-04-02 15:57:34",
+    "children": []
+  },
+  {
+    "firstname": "Michael",
+    "telephone_number": "(48)667574950",
+    "email": "kimberlymartin@",
+    "password": "ns6REVen+g",
+    "role": "admin",
+    "created_at": "2023-11-19 20:42:33",
     "children": []
   }
 ]
