@@ -100,7 +100,7 @@ class DatabaseManager:
         :return: data importer class for a given filetype
          (based on extension).
         """
-        file_extension = get_file_extension(filename)
+        file_extension = get_file_extension(filename).lower()
         match file_extension:
             case ".csv":
                 return CSVImporter
