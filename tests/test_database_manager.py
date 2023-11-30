@@ -192,7 +192,7 @@ class DatabaseManagerTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertEqual("user", user.role.name)
 
 
-class DatabaseManagerRolesTestCase(DatabaseManagerSetup, unittest.TestCase):
+class RolesTestCase(DatabaseManagerSetup, unittest.TestCase):
     def test_adding_roles(self):
         """
         Adding basic roles: admin and user.
@@ -203,6 +203,10 @@ class DatabaseManagerRolesTestCase(DatabaseManagerSetup, unittest.TestCase):
 
         self.assertIsNotNone(admin_role)
         self.assertIsNotNone(user_role)
+
+
+class LoadingDataFromFilesTestCase(DatabaseManagerSetup, unittest.TestCase):
+    pass
 
 
 if __name__ == '__main__':
