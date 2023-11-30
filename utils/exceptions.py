@@ -4,3 +4,7 @@ class InvalidInputError(ValueError):
 
 class InvalidEmailError(InvalidInputError):
     pass
+
+
+class InvalidPhoneNumberError(InvalidInputError):
+    pass
