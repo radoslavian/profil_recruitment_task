@@ -172,6 +172,25 @@ class DatabaseManagerTestCase(DatabaseManagerSetup, unittest.TestCase):
         password = self.TestData.user_without_children[0]["password"]
         self.assertTrue(check_password_hash(user.password_hash, password))
 
+    def test_user_with_admin_role(self):
+        user_data = self.TestData.user_without_children[0]
+        self.database_manager.feed_data(self.TestData.user_without_children)
+        admin_user = self.session.get(User, user_data["email"])
+
+        self.assertTrue("admin", admin_user.role.name)
+
+    def test_user_with_user_role(self):
+        user_data = [
+            {
+                **self.TestData.user_without_children[0],
+                "role": "user"
+            }
+        ]
+        self.database_manager.feed_data(user_data)
+        user = self.session.get(User, user_data[0]["email"])
+
+        self.assertEqual("user", user.role.name)
+
 
 class DatabaseManagerRolesTestCase(DatabaseManagerSetup, unittest.TestCase):
     def test_adding_roles(self):

@@ -3,7 +3,7 @@ import sys
 from sqlalchemy.exc import IntegrityError
 
 from database.models import start_engine, drop_all, User, Child, Role
-from utils.exceptions import InvalidInputError
+from utils.exceptions import InvalidInputError, RoleNotFoundError
 from utils.helpers import convert_datetime, normalize_telephone_num
 from utils.security import generate_password_hash
 
@@ -11,6 +11,7 @@ from utils.security import generate_password_hash
 class DatabaseManager:
     def __init__(self, engine_url="sqlite:///:memory:"):
         self.engine, self.session = start_engine(engine_url)
+        self.insert_roles()
 
     def drop_all(self):
         drop_all(self.engine)
@@ -41,12 +42,17 @@ class DatabaseManager:
             )
 
     def add_user_with_children(self, user):
+        role = self.session.query(Role).filter_by(name=user["role"]).first()
+        if role is None:
+            raise RoleNotFoundError(f"Role {user['role']} was not found.")
+
         new_user = User(
             email=user["email"],
             firstname=user["firstname"],
             telephone_number=normalize_telephone_num(
                 user["telephone_number"]),
             password_hash=generate_password_hash(user["password"]),
+            role=role,
             created_at=convert_datetime(user["created_at"])
         )
         self._add_children(user["children"], parent=new_user)

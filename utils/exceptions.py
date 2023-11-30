@@ -8,3 +8,7 @@ class InvalidEmailError(InvalidInputError):
 
 class InvalidPhoneNumberError(InvalidInputError):
     pass
+
+
+class RoleNotFoundError(Exception):
+    pass
