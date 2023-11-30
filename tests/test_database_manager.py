@@ -5,7 +5,6 @@ from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
 from database.database_manager import DatabaseManager
 from database.models import User, Child, Role
-from utils.exceptions import InvalidPhoneNumberError
 from utils.helpers import convert_datetime
 from utils.security import check_password_hash
 
