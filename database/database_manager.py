@@ -131,7 +131,10 @@ class DatabaseManager:
         if importer.is_loaded:
             self.feed_data(importer)
         else:
-            print(f"Import error: {importer.fail_reason}", file=sys.stderr)
+            print(f"Data import error:\n"
+                  f"File: {filename}\n"
+                  f"Reason message: {importer.fail_reason}",
+                  file=sys.stderr)
 
     def feed_files(self, filenames):
         """
