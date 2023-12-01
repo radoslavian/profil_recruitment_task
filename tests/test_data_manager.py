@@ -13,7 +13,16 @@ class TestData:
             "password": "z2Y%0Hbcsi",
             "role": "user",
             "created_at": "2023-04-02 15:57:34",
-            "children": []
+            "children": [
+                {
+                    "name": "Michael",
+                    "age": 17
+                },
+                {
+                    "name": "Angela",
+                    "age": 14
+                }
+            ]
         },
         {
             "firstname": "Justin",
@@ -22,7 +31,20 @@ class TestData:
             "password": "+3t)mSM6xX",
             "role": "admin",
             "created_at": "2022-11-25 02:19:37",
-            "children": []
+            "children": [
+                {
+                    "name": "Marie",
+                    "age": 17
+                },
+                {
+                    "name": "George",
+                    "age": 8
+                },
+                {
+                    "name": "Susan",
+                    "age": 14
+                }
+            ]
         },
         # phone num duplicated from Patricia
         {
@@ -93,6 +115,24 @@ class TasksTestCase(unittest.TestCase):
                          oldest_user_account.email)
         self.assertEqual(expected_user_data["created_at"],
                          str(oldest_user_account.created_at))
+
+    def test_group_children_by_age(self):
+        expected_output = [
+            {
+                "age": 8,
+                "count": 1
+            },
+            {
+                "age": 14,
+                "count": 2
+            },
+            {
+                "age": 17,
+                "count": 2
+            }
+        ]
+        result = self.data_manager.group_children_by_age()
+        self.assertListEqual(expected_output, result)
 
 
 if __name__ == '__main__':

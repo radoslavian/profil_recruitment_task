@@ -1,5 +1,5 @@
 from database.database_creator import DatabaseCreator
-from database.models import start_engine, drop_all, User
+from database.models import start_engine, drop_all, User, Child
 from utils.helpers import list_files_for_import
 
 
@@ -26,3 +26,16 @@ class DataManager:
         :return: User object
         """
         return self.session.query(User).order_by(User.created_at).first()
+
+    def group_children_by_age(self):
+        children = self.session.query(Child)
+        unique_ages = {
+            child.age for child in children
+        }
+        age_distribution = [
+            {
+                "age": age,
+                "count": children.filter_by(age=age).count()
+            } for age in sorted(unique_ages)
+        ]
+        return age_distribution
