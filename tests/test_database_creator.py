@@ -1,11 +1,12 @@
 import unittest
+from datetime import datetime
 
 from data_importer.csv_importer import CSVImporter
 from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
 from database.database_creator import DatabaseCreator
 from database.models import User, Child, Role, start_engine, drop_all
-from utils.helpers import convert_datetime, list_files_for_import
+from utils.helpers import list_files_for_import
 from utils.security import check_password_hash
 
 
@@ -131,7 +132,7 @@ class DatabaseCreatorTestCase(DatabaseCreatorSetup, unittest.TestCase):
         child = self.session.query(Child).first()
         # below equals to:
         # created at = self.TestData.duplicate_users[1]["created_at"]
-        created_at = convert_datetime("2023-03-05 04:14:24")
+        created_at = datetime.fromisoformat("2023-03-05 04:14:24")
 
         self.assertEqual(1, self.session.query(User).count())
         self.assertEqual(1, self.session.query(Child).count())
@@ -146,7 +147,7 @@ class DatabaseCreatorTestCase(DatabaseCreatorSetup, unittest.TestCase):
         duplicate_users = self.TestData.duplicate_users[::-1]
         # newer record will be added to the db as the first one
         self.database_manager.feed_data(duplicate_users)
-        created_at = convert_datetime("2023-03-05 04:14:24")
+        created_at = datetime.fromisoformat("2023-03-05 04:14:24")
         user = self.session.query(User).first()
 
         self.assertEqual(self.session.query(User).count(), 1)

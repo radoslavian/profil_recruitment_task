@@ -1,4 +1,5 @@
 import sys
+from datetime import datetime
 
 from sqlalchemy.exc import IntegrityError
 
@@ -7,8 +8,7 @@ from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
 from database.models import User, Child, Role
 from utils.exceptions import InvalidInputError, RoleNotFoundError
-from utils.helpers import convert_datetime, normalize_telephone_num, \
-    get_file_extension
+from utils.helpers import normalize_telephone_num, get_file_extension
 from utils.security import generate_password_hash
 
 
@@ -54,7 +54,7 @@ class DatabaseCreator:
                 user["telephone_number"]),
             password_hash=generate_password_hash(user["password"]),
             role=role,
-            created_at=convert_datetime(user["created_at"])
+            created_at=datetime.fromisoformat(user["created_at"])
         )
         self._add_children(user["children"], parent=new_user)
         self.session.add(new_user)
@@ -78,7 +78,7 @@ class DatabaseCreator:
                     telephone_number=normalized_tel_num).first()
         )
 
-        if convert_datetime(user["created_at"]) > user_in_db.created_at:
+        if datetime.fromisoformat(user["created_at"]) > user_in_db.created_at:
             self.session.delete(user_in_db)
             self.session.commit()
             self.add_user_with_children(user)

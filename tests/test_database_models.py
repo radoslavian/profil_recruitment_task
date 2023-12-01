@@ -1,10 +1,10 @@
 import unittest
+from datetime import datetime
 
 from sqlalchemy.exc import IntegrityError
 
 from database.models import User, start_engine, drop_all, Role, Child
 from utils.exceptions import InvalidEmailError
-from utils.helpers import convert_datetime
 
 
 class DatabaseTestCaseAbs(unittest.TestCase):
@@ -27,7 +27,7 @@ class UserRoleTestCase(DatabaseTestCaseAbs):
         self.session.add(self.admin_role)
         self.session.commit()
 
-        self.created_at = convert_datetime("2023-03-02 16:37:42")
+        self.created_at = datetime.fromisoformat("2023-03-02 16:37:42")
         user = User(
             email="esexton@example.net",
             firstname="Patricia",
@@ -136,7 +136,7 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
             email="cherrera@example.com",
             firstname="Gregory",
             children=self.children,
-            created_at=convert_datetime("2023-09-19 02:36:39")
+            created_at=datetime.fromisoformat("2023-09-19 02:36:39")
         )
         self.session.add(self.user)
         self.session.commit()
