@@ -3,23 +3,22 @@ import unittest
 from data_importer.csv_importer import CSVImporter
 from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
-from database.database_manager import DatabaseManager
-from database.models import User, Child, Role
+from database.database_creator import DatabaseCreator
+from database.models import User, Child, Role, start_engine, drop_all
 from utils.helpers import convert_datetime, list_files_for_import
 from utils.security import check_password_hash
 
 
-class DatabaseManagerSetup:
+class DatabaseCreatorSetup:
     def setUp(self):
-        self.database_manager = DatabaseManager("sqlite:///:memory:")
-        # this is needed for the greater good
-        self.session = self.database_manager.session
+        self.engine, self.session = start_engine("sqlite:///:memory:")
+        self.database_manager = DatabaseCreator(self.session)
 
     def tearDown(self):
-        self.database_manager.drop_all()
+        drop_all(self.engine)
 
 
-class DatabaseManagerTestCase(DatabaseManagerSetup, unittest.TestCase):
+class DatabaseCreatorTestCase(DatabaseCreatorSetup, unittest.TestCase):
     class TestData:
         user_with_children = [
             {
@@ -194,7 +193,7 @@ class DatabaseManagerTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertEqual("user", user.role.name)
 
 
-class RolesTestCase(DatabaseManagerSetup, unittest.TestCase):
+class RolesTestCase(DatabaseCreatorSetup, unittest.TestCase):
     def test_adding_roles(self):
         """
         Adding basic roles: admin and user.
@@ -207,7 +206,7 @@ class RolesTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertIsNotNone(user_role)
 
 
-class SelectingImporterTestCase(DatabaseManagerSetup, unittest.TestCase):
+class SelectingImporterTestCase(DatabaseCreatorSetup, unittest.TestCase):
     def test_selecting_csv_importer(self):
         """
         Should return importer for a csv file.
@@ -245,7 +244,7 @@ class SelectingImporterTestCase(DatabaseManagerSetup, unittest.TestCase):
         self.assertRaises(ValueError, import_wrong_file)
 
 
-class ImportingDataFromFiles(DatabaseManagerSetup, unittest.TestCase):
+class ImportingDataFromFiles(DatabaseCreatorSetup, unittest.TestCase):
     def test_importing_from_csv(self):
         test_data_file = "./test_data/a/b/file2.csv"
         self.database_manager.import_data_from_file(test_data_file)

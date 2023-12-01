@@ -12,13 +12,10 @@ from utils.helpers import convert_datetime, normalize_telephone_num, \
 from utils.security import generate_password_hash
 
 
-class DatabaseManager:
-    def __init__(self, engine_url="sqlite:///:memory:"):
-        self.engine, self.session = start_engine(engine_url)
+class DatabaseCreator:
+    def __init__(self, session):
+        self.session = session
         self.insert_roles()
-
-    def drop_all(self):
-        drop_all(self.engine)
 
     def insert_roles(self):
         roles = {"admin", "user"}
