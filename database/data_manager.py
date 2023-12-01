@@ -39,3 +39,14 @@ class DataManager:
             } for age in sorted(unique_ages)
         ]
         return age_distribution
+
+    @staticmethod
+    def get_children(user):
+        """
+        Return information about the user's children.
+        :param user: database.models.User instance
+        :return: alphabetically sorted list of children: [<child1>, <child2>]
+        """
+        return [
+            child for child in sorted(user.children, key=lambda c: c.name)
+        ]

@@ -2,6 +2,7 @@ import unittest
 from unittest import mock
 
 from database.data_manager import DataManager
+from database.models import User, Child
 
 
 class TestData:
@@ -132,6 +133,21 @@ class TasksTestCase(unittest.TestCase):
             }
         ]
         result = self.data_manager.group_children_by_age()
+        self.assertListEqual(expected_output, result)
+
+    def test_get_children(self):
+        """
+        Getting user's children. Children must be sorted alphabetically.
+        """
+        justin_phone = "678762794"
+        session = self.data_manager.session
+        user_justin = session.query(User).filter_by(
+            telephone_number=justin_phone).first()
+        expected_output = ['George, 8', 'Marie, 17', 'Susan, 14']
+        result = [
+            str(child) for child in
+            self.data_manager.get_children(user_justin)
+        ]
         self.assertListEqual(expected_output, result)
 
 
