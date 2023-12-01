@@ -76,4 +76,4 @@ class Child(Base):
         return f"{self.name}, {self.age}"
 
     def __repr__(self):
-        return f"<{self.__str__()}>"
+        return f"<Child: {self.__str__()}>"
