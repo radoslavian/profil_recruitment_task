@@ -5,7 +5,7 @@ from sqlalchemy.exc import IntegrityError
 from data_importer.csv_importer import CSVImporter
 from data_importer.json_importer import JsonImporter
 from data_importer.xml_importer import XMLImporter
-from database.models import start_engine, drop_all, User, Child, Role
+from database.models import User, Child, Role
 from utils.exceptions import InvalidInputError, RoleNotFoundError
 from utils.helpers import convert_datetime, normalize_telephone_num, \
     get_file_extension
