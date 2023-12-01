@@ -48,3 +48,19 @@ class DataManager:
         :return: alphabetically sorted query object
         """
         return user.children.order_by(Child.name)
+
+    def users_w_similar_aged_children(self, user):
+        """
+        Find users with children of the same age as at least one child
+        ownd by the user.
+        """
+        user_children_ages = {child.age for child in user.children}
+        all_children = self.session.query(Child)
+        children_with_similar_ages = all_children.filter(
+            Child.age.in_(user_children_ages)).filter(
+            Child.parent_id != user.email)  # excluding user's children
+        children_parents = {
+            child.parent for child in children_with_similar_ages
+        }
+
+        return sorted(children_parents, key=lambda p: p.firstname)

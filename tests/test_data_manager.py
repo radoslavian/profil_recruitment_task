@@ -144,11 +144,18 @@ class TasksTestCase(unittest.TestCase):
         user_justin = session.query(User).filter_by(
             telephone_number=justin_phone).first()
         expected_output = ['George, 8', 'Marie, 17', 'Susan, 14']
-        result = [
-            str(child) for child in
-            self.data_manager.get_children(user_justin)
-        ]
+        children = self.data_manager.get_children(user_justin)
+        result = [str(child) for child in children]
         self.assertListEqual(expected_output, result)
+
+    def test_similar_age_children(self):
+        patricia = self.data_manager.session.get(
+            User, "woodsjerry@example.com")
+        users = self.data_manager.users_w_similar_aged_children(patricia)
+
+        # roughly testing the desired behaviour
+        self.assertEqual(1, len(users))
+        self.assertEqual("opoole@example.org", users[0].email)
 
 
 if __name__ == '__main__':
