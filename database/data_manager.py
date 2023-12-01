@@ -45,8 +45,6 @@ class DataManager:
         """
         Return information about the user's children.
         :param user: database.models.User instance
-        :return: alphabetically sorted list of children: [<child1>, <child2>]
+        :return: alphabetically sorted query object
         """
-        return [
-            child for child in sorted(user.children, key=lambda c: c.name)
-        ]
+        return user.children.order_by(Child.name)
