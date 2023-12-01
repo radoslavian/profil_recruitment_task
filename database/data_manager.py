@@ -38,6 +38,8 @@ class DataManager:
                 "count": children.filter_by(age=age).count()
             } for age in sorted(unique_ages)
         ]
+        age_distribution.sort(key=lambda item: item["count"])
+
         return age_distribution
 
     @staticmethod
@@ -59,8 +61,15 @@ class DataManager:
         children_with_similar_ages = all_children.filter(
             Child.age.in_(user_children_ages)).filter(
             Child.parent_id != user.email)  # excluding user's children
-        children_parents = {
+        parents = {
             child.parent for child in children_with_similar_ages
         }
+        parents_children = {
+            parent: sorted(
+                [child for child in parent.children
+                 if child in children_with_similar_ages],
+                key=lambda c: c.name)
+            for parent in parents
+        }
 
-        return sorted(children_parents, key=lambda p: p.firstname)
+        return parents_children

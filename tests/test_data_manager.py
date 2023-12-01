@@ -152,10 +152,14 @@ class TasksTestCase(unittest.TestCase):
         patricia = self.data_manager.session.get(
             User, "woodsjerry@example.com")
         users = self.data_manager.users_w_similar_aged_children(patricia)
+        user_key = list(users.keys())[0]
 
         # roughly testing the desired behaviour
-        self.assertEqual(1, len(users))
-        self.assertEqual("opoole@example.org", users[0].email)
+        self.assertEqual(user_key.firstname, "Justin")
+        self.assertEqual(1, len(users.keys()))
+        self.assertEqual(2, len(users[user_key]))
+        self.assertEqual(str(users[user_key][0]), "Marie, 17")
+        self.assertEqual(str(users[user_key][1]), "Susan, 14")
 
 
 if __name__ == '__main__':
