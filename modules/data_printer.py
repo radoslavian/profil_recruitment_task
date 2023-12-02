@@ -25,8 +25,8 @@ def print_users_children_same_age(data):
             print(f"{str(_children[i])}", end="")
             (i == len(_children) - 1) or print("; ", end="")
 
-    keys = data.keys()
-    for key in keys:
+    parents = sorted(data.keys(), key=lambda parent: parent.firstname)
+    for key in parents:
         print(f"{str(key)}: ", end="")
         children = data[key]
         _print_children(children)
