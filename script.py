@@ -47,14 +47,14 @@ if __name__ == '__main__':
     password = args.password or ""
     data_manager = DataManager(DATABASE_URL)
 
-    if not login or not password:
-        print("Please provide full credentials.")
-        exit(1)
-
     if task == "create_database":
         print("Creating database...")
         data_manager.create_database(DATA_DIR)
         exit(0)
+
+    if not login or not password:
+        print("Please provide full credentials.")
+        exit(1)
 
     try:
         data_manager.log_in(login, password)
