@@ -5,8 +5,7 @@ import os
 
 from database.data_manager import DataManager
 from modules.data_printer import *
-from utils.exceptions import AuthorizationError, AuthenticationError, \
-    InvalidCredentialsError
+from utils.exceptions import CredentialsError
 
 DATABASE_PATH = os.path.join(
     os.path.dirname(__file__), "database", "users.db")
@@ -59,8 +58,5 @@ if __name__ == '__main__':
     try:
         data_manager.log_in(login, password)
         match_task(task)
-    except (AuthenticationError, InvalidCredentialsError)\
-            as authentication_error:
-        print(authentication_error)
-    except AuthorizationError as authorization_error:
-        print(authorization_error)
+    except CredentialsError:
+        print("Invalid Login")
