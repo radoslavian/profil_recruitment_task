@@ -40,4 +40,6 @@ class AuthorizationError(CredentialsError):
     Exception to be raised when the user has insufficient authorization
     to perform an action (for instance, action requires admin credentials).
     """
-    pass
+    def __init__(self, msg="Insufficient credentials to perform this action",
+                 *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)
