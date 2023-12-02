@@ -2,9 +2,9 @@ import re
 
 from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
-from utils.exceptions import AuthenticationError, InvalidCredentialsError
+from utils.exceptions import InvalidCredentialsError
 from utils.helpers import list_files_for_import
-from utils.security import login_required
+from utils.security import login_required, admin_required
 from utils.validators import email_regex, telephone_num_regex
 
 
@@ -32,6 +32,7 @@ class DataManager:
         self._authenticated_user = None
 
     @login_required
+    @admin_required
     def drop_database(self):
         drop_all(self.engine)
 
@@ -42,6 +43,7 @@ class DataManager:
         self.database_creator.feed_files(files_for_import)
 
     @login_required
+    @admin_required
     def accounts_total_number(self):
         """
         Print The Number of All Valid Accounts
@@ -49,6 +51,7 @@ class DataManager:
         return self.session.query(User).count()
 
     @login_required
+    @admin_required
     def get_oldest_account(self):
         """
         Information about account with the longest existence.
@@ -57,6 +60,7 @@ class DataManager:
         return self.session.query(User).order_by(User.created_at).first()
 
     @login_required
+    @admin_required
     def group_children_by_age(self):
         children = self.session.query(Child)
         unique_ages = {

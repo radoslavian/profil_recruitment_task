@@ -2,8 +2,8 @@ import unittest
 from unittest import mock
 
 from database.data_manager import DataManager
-from database.models import User, Child
-from utils.exceptions import AuthenticationError, InvalidCredentialsError
+from database.models import User, drop_all
+from utils.exceptions import InvalidCredentialsError, AuthorizationError
 
 
 class TestData:
@@ -92,7 +92,7 @@ class TasksTestCase(unittest.TestCase):
                                  "+3t)mSM6xX")
 
     def tearDown(self):
-        self.data_manager.drop_database()
+        drop_all(self.data_manager.engine)
 
     def test_get_number_of_valid_accounts(self):
         """
@@ -206,6 +206,15 @@ class AuthenticationAuthorizationTestCase(unittest.TestCase):
                                      self.password)
 
         self.assertRaises(InvalidCredentialsError, fail_logging_in)
+
+    def test_no_authorization_to_call_task(self):
+        """
+        Attempt to perform admin task by a user without the admin role.
+        """
+        self.data_manager.log_in("woodsjerry@example.com",
+                                 "z2Y%0Hbcsi")
+        self.assertRaises(
+            AuthorizationError, self.data_manager.accounts_total_number)
 
 
 if __name__ == '__main__':
