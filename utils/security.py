@@ -1,6 +1,8 @@
 from hashlib import sha256
 
-from utils.exceptions import AuthenticationError
+from utils.exceptions import AuthenticationError, AuthorizationError
+
+ADMIN_ROLE_NAME = "admin"
 
 
 def generate_password_hash(password):
@@ -16,5 +18,14 @@ def login_required(func):
         if self._authenticated_user is not None:
             return func(self, *args, **kwargs)
         raise AuthenticationError
+
+    return _decorator
+
+
+def admin_required(func):
+    def _decorator(self, *args, **kwargs):
+        if self._authenticated_user.role.name == ADMIN_ROLE_NAME:
+            return func(self, *args, **kwargs)
+        raise AuthorizationError
 
     return _decorator
