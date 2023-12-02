@@ -21,7 +21,7 @@ class InvalidCredentialsError(Exception):
     pass
 
 
-class InvalidAuthenticationError(InvalidCredentialsError):
+class AuthenticationError(InvalidCredentialsError):
     """
     Exception to be raised when no/invalid credentials (login or password)
     are provided.
@@ -29,7 +29,7 @@ class InvalidAuthenticationError(InvalidCredentialsError):
     pass
 
 
-class InvalidAuthorizationError(InvalidCredentialsError):
+class AuthorizationError(InvalidCredentialsError):
     """
     Exception to be raised when the user has insufficient authorization
     to perform an action (for instance, action requires admin credentials).
