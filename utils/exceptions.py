@@ -26,7 +26,8 @@ class AuthenticationError(InvalidCredentialsError):
     Exception to be raised when no/invalid credentials (login or password)
     are provided.
     """
-    pass
+    def __init__(self, msg="Authentication required.", *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)
 
 
 class AuthorizationError(InvalidCredentialsError):
