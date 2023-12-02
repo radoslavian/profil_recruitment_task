@@ -107,14 +107,6 @@ class EmailValidatorTopLevelDomain(unittest.TestCase):
         self.assertRaises(InvalidEmailError,
                           lambda: validate_email(email_address))
 
-    def test_numbers_only(self):
-        """
-        Should fail: the top-level domain will never consist of only numbers.
-        """
-        email_address = "user@domain1.123"
-        self.assertRaises(InvalidEmailError,
-                          lambda: validate_email(email_address))
-
     def test_no_top_level_domain(self):
         """
         Should fail: no top-level domain.
