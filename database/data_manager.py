@@ -37,6 +37,9 @@ class DataManager:
         self.database_creator.feed_files(files_for_import)
 
     def accounts_total_number(self):
+        """
+        Print The Number of All Valid Accounts
+        """
         return self.session.query(User).count()
 
     def get_oldest_account(self):
