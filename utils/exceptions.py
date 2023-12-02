@@ -14,14 +14,19 @@ class RoleNotFoundError(Exception):
     pass
 
 
-class InvalidCredentialsError(Exception):
+class CredentialsError(Exception):
     """
     Base class for authorization/authentication errors.
     """
     pass
 
 
-class AuthenticationError(InvalidCredentialsError):
+class InvalidCredentialsError(CredentialsError):
+    def __init__(self, msg="Wrong username or password.", *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)
+
+
+class AuthenticationError(CredentialsError):
     """
     Exception to be raised when no/invalid credentials (login or password)
     are provided.
@@ -30,7 +35,7 @@ class AuthenticationError(InvalidCredentialsError):
         super().__init__(msg, *args, **kwargs)
 
 
-class AuthorizationError(InvalidCredentialsError):
+class AuthorizationError(CredentialsError):
     """
     Exception to be raised when the user has insufficient authorization
     to perform an action (for instance, action requires admin credentials).

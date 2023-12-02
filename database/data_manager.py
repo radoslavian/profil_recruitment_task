@@ -2,7 +2,7 @@ import re
 
 from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
-from utils.exceptions import AuthenticationError
+from utils.exceptions import AuthenticationError, InvalidCredentialsError
 from utils.helpers import list_files_for_import
 from utils.security import login_required
 from utils.validators import email_regex, telephone_num_regex
@@ -26,7 +26,7 @@ class DataManager:
         if user is not None and user.verify_password(password):
             self._authenticated_user = user
         else:
-            raise AuthenticationError
+            raise InvalidCredentialsError
 
     def log_out(self):
         self._authenticated_user = None

@@ -3,7 +3,7 @@ from unittest import mock
 
 from database.data_manager import DataManager
 from database.models import User, Child
-from utils.exceptions import AuthenticationError
+from utils.exceptions import AuthenticationError, InvalidCredentialsError
 
 
 class TestData:
@@ -183,7 +183,7 @@ class AuthenticationAuthorizationTestCase(unittest.TestCase):
         def fail_logging_in():
             self.data_manager.log_in(self.email, "wrong_password")
 
-        self.assertRaises(AuthenticationError, fail_logging_in)
+        self.assertRaises(InvalidCredentialsError, fail_logging_in)
 
     def test_logging_in_by_telephone_success(self):
         self.data_manager.log_in(self.phone_num, self.password)
@@ -195,7 +195,7 @@ class AuthenticationAuthorizationTestCase(unittest.TestCase):
             self.data_manager.log_in(self.phone_num,
                                      "wrong_password")
 
-        self.assertRaises(AuthenticationError, fail_logging_in)
+        self.assertRaises(InvalidCredentialsError, fail_logging_in)
 
     def test_invalid_login(self):
         """
@@ -205,7 +205,7 @@ class AuthenticationAuthorizationTestCase(unittest.TestCase):
             self.data_manager.log_in("##$zdfva54854855154",
                                      self.password)
 
-        self.assertRaises(AuthenticationError, fail_logging_in)
+        self.assertRaises(InvalidCredentialsError, fail_logging_in)
 
 
 if __name__ == '__main__':
