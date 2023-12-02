@@ -206,6 +206,7 @@ class UserCredentialsTestCase(DatabaseTestCaseAbs):
         self.assertRaises(AttributeError, lambda: self.user.password)
 
     def test_password_hashing(self):
+        self.assertEqual(64, len(self.user.password_hash))
         self.assertNotEqual(self.user.password_hash,
                             "very_odd_password")
 
