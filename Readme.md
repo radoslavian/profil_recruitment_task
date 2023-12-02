@@ -1,3 +1,4 @@
+Radosław Kuzyk
 ## Installation
 The scripts were written for Python version 3.11.3.  
 Once downloaded, within a script directory a virtual environment
@@ -54,9 +55,9 @@ Printing out children of a similar age to the children of a
 logged-in user (together with their parents):
 ```
 $ python script.py find-similar-children-by-age --login briancollins@example.net --password 'R9AjA5nb$!'
-Joseph, 018820162: Wendy, 3
+Caroline, 217311726: Dustin, 13
+Curtis, 816163817: Dustin, 3
 Danny, 342559287: David, 3
-Sarah, 318506164: Bradley, 13
 ...
 ```
 
