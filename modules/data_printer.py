@@ -11,7 +11,7 @@ def print_oldest_account(user):
 
 def print_children_by_age(ages_distribution):
     for item in ages_distribution:
-        print(f"age: {item['age']}, count: {item['count']}\n")
+        print(f"age: {item['age']}, count: {item['count']}")
 
 
 def print_children(user):

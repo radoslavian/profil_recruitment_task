@@ -2,7 +2,7 @@ import unittest
 from datetime import datetime
 from unittest.mock import patch, call
 
-from modules.data_printer import print_longest_existing_account, \
+from modules.data_printer import print_oldest_account, \
     print_children_by_age, print_children, print_users_children_same_age
 
 
@@ -38,7 +38,7 @@ class DataPrinterTestCase(unittest.TestCase):
 
     @patch("builtins.print")
     def test_printing_longest_existing_account(self, mocked_print):
-        print_longest_existing_account(self.User)
+        print_oldest_account(self.User)
         expected_output = ("name: Boris\n"
                            "email_address: boris@gmail.com\n"
                            "created_at: 1990-12-12 13:20:00\n")
@@ -47,7 +47,7 @@ class DataPrinterTestCase(unittest.TestCase):
     @patch("builtins.print")
     def test_printing_children_by_age(self, mocked_print):
         print_children_by_age(self.ages_distribution)
-        expected_output = "age: 8, count: 1\n"
+        expected_output = "age: 8, count: 1"
         mocked_print.assert_called_with(expected_output)
 
     @patch("builtins.print")
