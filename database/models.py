@@ -3,6 +3,7 @@ from sqlalchemy.orm import declarative_base, sessionmaker, relationship, \
 from sqlalchemy import (create_engine, Column, String, Integer, Boolean,
                         DateTime, ForeignKey)
 
+from utils.security import generate_password_hash, check_password_hash
 from utils.validators import validate_email, validate_telephone_number
 
 Base = declarative_base()
@@ -45,6 +46,17 @@ class User(Base):
     # hash will be generated using hashlib.sha256().hexdigest
     password_hash = Column(String(64))
     created_at = Column(DateTime, nullable=False)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    @property
+    def password(self):
+        raise AttributeError("Password is not a readable attribute.")
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
 
     @validates("email")
     def validate_email(self, key, email):

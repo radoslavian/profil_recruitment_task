@@ -60,6 +60,7 @@ class UserRoleTestCase(DatabaseTestCaseAbs):
         """
         Creating a user instance should fail if no email is given.
         """
+
         def raise_error():
             user = User(
                 firstname="Patricia",
@@ -183,6 +184,30 @@ class UserChildrenTestCase(DatabaseTestCaseAbs):
         """
         child = self.children[0]
         self.assertEqual(f"{child.name}, {child.age}", str(child))
+
+
+class UserCredentialsTestCase(DatabaseTestCaseAbs):
+    def setup_test_data(self):
+        self.created_at = datetime.fromisoformat("2023-03-02 16:37:42")
+        self.user = User(
+            firstname="Patricia",
+            telephone_number="013112467",
+            created_at=self.created_at,
+            password="very_odd_password"
+        )
+
+    def test_verify_password_success(self):
+        self.assertTrue(self.user.verify_password("very_odd_password"))
+
+    def test_verify_password_failure(self):
+        self.assertFalse(self.user.verify_password("wrong_password"))
+
+    def test_attempt_to_read_password(self):
+        self.assertRaises(AttributeError, lambda: self.user.password)
+
+    def test_password_hashing(self):
+        self.assertNotEqual(self.user.password_hash,
+                            "very_odd_password")
 
 
 if __name__ == '__main__':
