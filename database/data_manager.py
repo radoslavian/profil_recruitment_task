@@ -1,12 +1,31 @@
+import re
+
 from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
+from utils.exceptions import AuthenticationError
 from utils.helpers import list_files_for_import
+from utils.validators import email_regex, telephone_num_regex
 
 
 class DataManager:
     def __init__(self, database_url="sqlite:///:memory:"):
         self.engine, self.session = start_engine(database_url)
         self.database_creator = DatabaseCreator(self.session)
+        self._authenticated_user = None
+
+    def log_in(self, login, password):
+        user = None
+        user_query = self.session.query(User)
+
+        if re.fullmatch(email_regex, login):
+            user = user_query.filter_by(email=login).first()
+        elif re.fullmatch(telephone_num_regex, login):
+            user = user_query.filter_by(telephone_number=login).first()
+
+        if user is not None and user.verify_password(password):
+            self._authenticated_user = user
+        else:
+            raise AuthenticationError
 
     def drop_database(self):
         drop_all(self.engine)
@@ -42,20 +61,19 @@ class DataManager:
 
         return age_distribution
 
-    @staticmethod
-    def get_children(user):
+    def get_children(self):
         """
         Return information about the user's children.
-        :param user: database.models.User instance
         :return: alphabetically sorted query object
         """
-        return user.children.order_by(Child.name)
+        return self._authenticated_user.children.order_by(Child.name)
 
-    def users_w_similar_aged_children(self, user):
+    def users_w_similar_aged_children(self):
         """
         Find users with children of the same age as at least one child
         ownd by the user.
         """
+        user = self._authenticated_user
         user_children_ages = {child.age for child in user.children}
         all_children = self.session.query(Child)
         children_with_similar_ages = all_children.filter(

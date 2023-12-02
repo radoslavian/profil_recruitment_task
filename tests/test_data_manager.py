@@ -3,6 +3,7 @@ from unittest import mock
 
 from database.data_manager import DataManager
 from database.models import User, Child
+from utils.exceptions import AuthenticationError
 
 
 class TestData:
@@ -140,18 +141,16 @@ class TasksTestCase(unittest.TestCase):
         Getting user's children. Children must be sorted alphabetically.
         """
         justin_phone = "678762794"
-        session = self.data_manager.session
-        user_justin = session.query(User).filter_by(
-            telephone_number=justin_phone).first()
+        self.data_manager.log_in(justin_phone, "+3t)mSM6xX")
         expected_output = ['George, 8', 'Marie, 17', 'Susan, 14']
-        children = self.data_manager.get_children(user_justin)
+        children = self.data_manager.get_children()
         result = [str(child) for child in children]
         self.assertListEqual(expected_output, result)
 
     def test_similar_age_children(self):
-        patricia = self.data_manager.session.get(
-            User, "woodsjerry@example.com")
-        users = self.data_manager.users_w_similar_aged_children(patricia)
+        self.data_manager.log_in("woodsjerry@example.com",
+                                 "z2Y%0Hbcsi")
+        users = self.data_manager.users_w_similar_aged_children()
         user_key = list(users.keys())[0]
 
         # roughly testing the desired behaviour
@@ -160,6 +159,51 @@ class TasksTestCase(unittest.TestCase):
         self.assertEqual(2, len(users[user_key]))
         self.assertEqual(str(users[user_key][0]), "Marie, 17")
         self.assertEqual(str(users[user_key][1]), "Susan, 14")
+
+
+class AuthenticationAuthorizationTestCase(unittest.TestCase):
+    def setUp(self):
+        self.data_manager = DataManager("sqlite:///:memory:")
+        self.session = self.data_manager.session
+        self.data_manager.database_creator.feed_data(TestData.users)
+        self.email = "woodsjerry@example.com"
+        self.password = "z2Y%0Hbcsi"
+        self.phone_num = "823816375"
+        self.user_patricia = self.session.query(User).filter_by(
+            email=self.email).first()
+
+    def test_logging_in_by_email_success(self):
+        self.data_manager.log_in(self.email, self.password)
+        self.assertEqual(self.user_patricia,
+                         self.data_manager._authenticated_user)
+
+    def test_logging_in_by_email_fail(self):
+        def fail_logging_in():
+            self.data_manager.log_in(self.email, "wrong_password")
+
+        self.assertRaises(AuthenticationError, fail_logging_in)
+
+    def test_logging_in_by_telephone_success(self):
+        self.data_manager.log_in(self.phone_num, self.password)
+        self.assertEqual(self.user_patricia,
+                         self.data_manager._authenticated_user)
+
+    def test_logging_in_by_telephone_fail(self):
+        def fail_logging_in():
+            self.data_manager.log_in(self.phone_num,
+                                     "wrong_password")
+
+        self.assertRaises(AuthenticationError, fail_logging_in)
+
+    def test_invalid_login(self):
+        """
+        Attempt to pass login that is neither an email nor phone number.
+        """
+        def fail_logging_in():
+            self.data_manager.log_in("##$zdfva54854855154",
+                                     self.password)
+
+        self.assertRaises(AuthenticationError, fail_logging_in)
 
 
 if __name__ == '__main__':
