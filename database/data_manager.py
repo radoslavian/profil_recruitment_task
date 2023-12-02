@@ -4,6 +4,7 @@ from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
 from utils.exceptions import AuthenticationError
 from utils.helpers import list_files_for_import
+from utils.security import login_required
 from utils.validators import email_regex, telephone_num_regex
 
 
@@ -27,6 +28,10 @@ class DataManager:
         else:
             raise AuthenticationError
 
+    def log_out(self):
+        self._authenticated_user = None
+
+    @login_required
     def drop_database(self):
         drop_all(self.engine)
 
@@ -36,12 +41,14 @@ class DataManager:
             toplevel_dir, file_extensions)
         self.database_creator.feed_files(files_for_import)
 
+    @login_required
     def accounts_total_number(self):
         """
         Print The Number of All Valid Accounts
         """
         return self.session.query(User).count()
 
+    @login_required
     def get_oldest_account(self):
         """
         Information about account with the longest existence.
@@ -49,6 +56,7 @@ class DataManager:
         """
         return self.session.query(User).order_by(User.created_at).first()
 
+    @login_required
     def group_children_by_age(self):
         children = self.session.query(Child)
         unique_ages = {
@@ -64,6 +72,7 @@ class DataManager:
 
         return age_distribution
 
+    @login_required
     def get_children(self):
         """
         Return information about the user's children.
@@ -71,6 +80,7 @@ class DataManager:
         """
         return self._authenticated_user.children.order_by(Child.name)
 
+    @login_required
     def users_w_similar_aged_children(self):
         """
         Find users with children of the same age as at least one child

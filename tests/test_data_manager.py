@@ -88,6 +88,8 @@ class TasksTestCase(unittest.TestCase):
     def setUp(self):
         self.data_manager = DataManager("sqlite:///:memory:")
         self.data_manager.database_creator.feed_data(TestData.users)
+        self.data_manager.log_in("opoole@example.org",
+                                 "+3t)mSM6xX")
 
     def tearDown(self):
         self.data_manager.drop_database()
@@ -141,13 +143,13 @@ class TasksTestCase(unittest.TestCase):
         Getting user's children. Children must be sorted alphabetically.
         """
         justin_phone = "678762794"
-        self.data_manager.log_in(justin_phone, "+3t)mSM6xX")
         expected_output = ['George, 8', 'Marie, 17', 'Susan, 14']
         children = self.data_manager.get_children()
         result = [str(child) for child in children]
         self.assertListEqual(expected_output, result)
 
     def test_similar_age_children(self):
+        self.data_manager.log_out()
         self.data_manager.log_in("woodsjerry@example.com",
                                  "z2Y%0Hbcsi")
         users = self.data_manager.users_w_similar_aged_children()
