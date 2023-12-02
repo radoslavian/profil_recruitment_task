@@ -1,4 +1,5 @@
 import re
+from collections import OrderedDict
 
 from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
@@ -96,8 +97,13 @@ class DataManager:
         children_with_similar_ages = all_children.filter(
             Child.age.in_(user_children_ages)).filter(
             Child.parent_id != user.email)  # excluding user's children
+
+        # results have to be sorted alphabetically by each child's name
+        # dict since Python 3.7 is an ordered data structured
+        # (set is not)
         parents = {
-            child.parent for child in children_with_similar_ages
+            child.parent: "" for child
+            in children_with_similar_ages.order_by(Child.name)
         }
         parents_children = {
             parent: sorted(
