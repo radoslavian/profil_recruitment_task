@@ -9,6 +9,7 @@ from data_importer.xml_importer import XMLImporter
 from database.models import User, Child, Role
 from utils.exceptions import InvalidInputError, RoleNotFoundError
 from utils.helpers import normalize_telephone_num, get_file_extension
+from utils.security import ADMIN_ROLE_NAME
 
 
 class DatabaseCreator:
@@ -17,7 +18,7 @@ class DatabaseCreator:
         self.insert_roles()
 
     def insert_roles(self):
-        roles = {"admin", "user"}
+        roles = {ADMIN_ROLE_NAME, "user"}
         default_role = "user"
 
         for r in roles:
