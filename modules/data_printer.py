@@ -4,10 +4,9 @@ Functions for printing data in a desired format.
 
 
 def print_longest_existing_account(user):
-    output = (f"name: {user.firstname}\n"
-              f"email_address: {user.email}\n"
-              f"created_at: {user.created_at}\n")
-    print(output)
+    print(f"name: {user.firstname}\n"
+          f"email_address: {user.email}\n"
+          f"created_at: {user.created_at}\n")
 
 
 def print_children_by_age(ages_distribution):
@@ -32,5 +31,3 @@ def print_users_children_same_age(data):
         children = data[key]
         _print_children(children)
         print()
-
-
