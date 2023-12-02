@@ -1,16 +1,33 @@
-# This is a sample Python script.
+#!/usr/bin/env python
 
-# Press Shift+F10 to execute it or replace it with your code.
-# Press Double Shift to search everywhere for classes, files, tool windows, actions, and settings.
+import argparse
+import os
 
+from database.data_manager import DataManager
+from modules.data_printer import *
 
-def print_hi(name):
-    # Use a breakpoint in the code line below to debug your script.
-    print(f'Hi, {name}')  # Press Ctrl+F8 to toggle the breakpoint.
+DATABASE_PATH = os.path.join(
+    os.path.dirname(__file__), "database", "users.db")
+DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
+parser = argparse.ArgumentParser()
+parser.add_argument("task")
+args = parser.parse_args()
+task = args.task
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    print_hi('PyCharm')
+    data_manager = DataManager(DATABASE_URL)
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
+    match task:
+        case "create_database":
+            data_manager.create_database(DATA_DIR)
+        case "print-all-accounts":
+            number_of_accounts = data_manager.accounts_total_number()
+            print(number_of_accounts)
+        case "print-oldest-account":
+            oldest_account = data_manager.get_oldest_account()
+            print_oldest_account(oldest_account)
+        case "group-by-age":
+            children_by_age = data_manager.group_children_by_age()
+            print_children_by_age(children_by_age)
