@@ -14,9 +14,9 @@ def print_children_by_age(ages_distribution):
         print(f"age: {item['age']}, count: {item['count']}")
 
 
-def print_children(user):
-    for child in user.children:
-        print(f"{child}\n")
+def print_children(children):
+    for child in children:
+        print(f"{child}")
 
 
 def print_users_children_same_age(data):

@@ -12,16 +12,25 @@ DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 parser = argparse.ArgumentParser()
-parser.add_argument("task")
+for argument in ["task", "--login", "--password"]:
+    parser.add_argument(argument)
+
 args = parser.parse_args()
 task = args.task
 
 if __name__ == '__main__':
+    login = args.login or ""
+    password = args.password or ""
     data_manager = DataManager(DATABASE_URL)
 
+    if task == "create_database":
+        print("Creating database...")
+        data_manager.create_database(DATA_DIR)
+        exit(0)
+
+    data_manager.log_in(login, password)
+
     match task:
-        case "create_database":
-            data_manager.create_database(DATA_DIR)
         case "print-all-accounts":
             number_of_accounts = data_manager.accounts_total_number()
             print(number_of_accounts)
@@ -31,3 +40,12 @@ if __name__ == '__main__':
         case "group-by-age":
             children_by_age = data_manager.group_children_by_age()
             print_children_by_age(children_by_age)
+        case "print-children":
+            users_children = data_manager.get_children()
+            print_children(users_children)
+        case "find-similar-children-by-age":
+            similar_aged_children = data_manager \
+                .users_w_similar_aged_children()
+            print_users_children_same_age(similar_aged_children)
+        case _:
+            print("Unrecognized task.")

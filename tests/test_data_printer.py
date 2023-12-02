@@ -52,10 +52,10 @@ class DataPrinterTestCase(unittest.TestCase):
 
     @patch("builtins.print")
     def test_print_children(self, mocked_print):
-        print_children(self.User)
+        print_children(self.User.children)
         expected_output = [
-            call("Archibald, 2\n"),
-            call("Tim, 15\n")
+            call("Archibald, 2"),
+            call("Tim, 15")
         ]
         self.assertEqual(expected_output, mocked_print.mock_calls)
 
