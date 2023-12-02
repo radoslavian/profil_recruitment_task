@@ -9,7 +9,6 @@ from data_importer.xml_importer import XMLImporter
 from database.models import User, Child, Role
 from utils.exceptions import InvalidInputError, RoleNotFoundError
 from utils.helpers import normalize_telephone_num, get_file_extension
-from utils.security import generate_password_hash
 
 
 class DatabaseCreator:
@@ -52,7 +51,7 @@ class DatabaseCreator:
             firstname=user["firstname"],
             telephone_number=normalize_telephone_num(
                 user["telephone_number"]),
-            password_hash=generate_password_hash(user["password"]),
+            password=user["password"],
             role=role,
             created_at=datetime.fromisoformat(user["created_at"])
         )
