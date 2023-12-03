@@ -14,7 +14,7 @@ $ source venv/bin/activate
 then install the required additional libraries
 (SQLAlchemy and LXML) listed in requirements.txt:
 ```
-$ pip3 -r ./requirements.txt
+$ pip3 install -r ./requirements.txt
 ```
 ## Data import
 For the script to work properly, the directory with the data to be 
