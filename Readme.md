@@ -55,10 +55,10 @@ Printing out children of a similar age to the children of a
 logged-in user (together with their parents):
 ```
 $ python script.py find-similar-children-by-age --login briancollins@example.net --password 'R9AjA5nb$!'
-Caroline, 217311726: Dustin, 13
-Curtis, 816163817: Dustin, 3
+Sarah, 318506164: Bradley, 13
+Jeffrey, 854869516: Brian, 13
 Danny, 342559287: David, 3
-...
+Ebony, 289862947: Deanna, 3
 ```
 
 ## WARNING
