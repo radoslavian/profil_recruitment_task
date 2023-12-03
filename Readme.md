@@ -7,7 +7,11 @@ needs to be created - according to the
 ```
 $ python -m venv ./venv
 ```  
-Then install the required additional libraries
+activate the newly created virtual environment:
+```
+$ source venv/bin/activate
+```
+then install the required additional libraries
 (SQLAlchemy and LXML) listed in requirements.txt:
 ```
 $ pip3 -r ./requirements.txt
@@ -59,10 +63,11 @@ Sarah, 318506164: Bradley, 13
 Jeffrey, 854869516: Brian, 13
 Danny, 342559287: David, 3
 Ebony, 289862947: Deanna, 3
+...
 ```
 
 ## WARNING
-Bash (and probably other Linux shells) interprets some
+Bash (and probably other Linux shells) interprets certain
 characters as special (e.g. !, #, $) - if login fails
 using the correct password, enter this password in
 single quotes - __' '__ (like _literal string_
