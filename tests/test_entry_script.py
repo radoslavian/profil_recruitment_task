@@ -41,7 +41,7 @@ class TasksTestCase(unittest.TestCase):
         self.args.password = "password"
         self.args.task = ""
 
-    def _task(self):
+    def _run_task(self):
         with mock.patch("script.DataManager") as DataManager:
             DataManager.return_value = self.data_manager
             try:
@@ -62,7 +62,7 @@ class TasksTestCase(unittest.TestCase):
         self.args.password = ""
         self.args.task = "create_database"
 
-        DataManager = self._task()
+        DataManager = self._run_task()
         DataManager.assert_called_with(script.DATABASE_URL)
         self.data_manager.create_database.assert_called_with(script.DATA_DIR)
 
@@ -71,7 +71,7 @@ class TasksTestCase(unittest.TestCase):
         Logging-in to the DataManager.
         """
         self.args.task = "print-all-accounts"
-        self._task()
+        self._run_task()
         self.data_manager.log_in.assert_called_with(
             self.args.login, self.args.password)
 
@@ -81,7 +81,7 @@ class TasksTestCase(unittest.TestCase):
         Providing flags but an unknown task.
         """
         self.args.task = "unknown_task"
-        self._task()
+        self._run_task()
         mock_print.assert_called_with("Unrecognized task.")
 
     @mock.patch("builtins.print")
@@ -91,7 +91,7 @@ class TasksTestCase(unittest.TestCase):
         expected_return_value = "total number of accounts"
         self.data_manager.accounts_total_number\
             .return_value = expected_return_value
-        self._task()
+        self._run_task()
 
         self.data_manager.accounts_total_number.assert_called()
         mock_print.assert_called_with(expected_return_value)
@@ -103,7 +103,7 @@ class TasksTestCase(unittest.TestCase):
         expected_return_value = "oldest account"
         self.data_manager.get_oldest_account\
             .return_value = expected_return_value
-        self._task()
+        self._run_task()
 
         self.data_manager.get_oldest_account.assert_called()
         print_oldest_account.assert_called_with(expected_return_value)
@@ -115,7 +115,7 @@ class TasksTestCase(unittest.TestCase):
         expected_return_value = "children grouped by age"
         self.data_manager.group_children_by_age\
             .return_value = expected_return_value
-        self._task()
+        self._run_task()
 
         self.data_manager.group_children_by_age.assert_called()
         group_children_by_age.assert_called_with(expected_return_value)
@@ -126,7 +126,7 @@ class TasksTestCase(unittest.TestCase):
         self.data_manager.get_children = Mock()
         expected_return_value = "user's children"
         self.data_manager.get_children.return_value = expected_return_value
-        self._task()
+        self._run_task()
 
         self.data_manager.get_children.assert_called()
         print_children.assert_called_with(expected_return_value)
@@ -139,7 +139,7 @@ class TasksTestCase(unittest.TestCase):
         expected_return_value = "found children of similar age"
         self.data_manager.users_w_similar_aged_children\
             .return_value = expected_return_value
-        self._task()
+        self._run_task()
 
         self.data_manager.users_w_similar_aged_children.assert_called()
         print_users_children_same_age.assert_called_with(
