@@ -11,7 +11,7 @@ DATABASE_URL = f"sqlite:///{DATABASE_PATH}"
 DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 
 
-def match_task(user_task):
+def match_task(user_task, data_manager):
     match user_task:
         case "print-all-accounts":
             number_of_accounts = data_manager.accounts_total_number()
@@ -33,15 +33,15 @@ def match_task(user_task):
             print("Unrecognized task.")
 
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    for argument in ["task", "--login", "--password"]:
-        parser.add_argument(argument)
-
-    args = parser.parse_args()
+def main(args):
     task = args.task
     login = args.login or ""
     password = args.password or ""
+
+    if (not login or not password) and not task == "create_database":
+        print("Please provide full credentials.")
+        exit(1)
+
     data_manager = DataManager(DATABASE_URL)
 
     if task == "create_database":
@@ -49,12 +49,17 @@ if __name__ == '__main__':
         data_manager.create_database(DATA_DIR)
         exit(0)
 
-    if not login or not password:
-        print("Please provide full credentials.")
-        exit(1)
-
     try:
         data_manager.log_in(login, password)
-        match_task(task)
+        match_task(task, data_manager)
     except CredentialsError:
         print("Invalid Login")
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    for argument in ["task", "--login", "--password"]:
+        parser.add_argument(argument)
+
+    script_args = parser.parse_args()
+    main(script_args)
