@@ -142,7 +142,6 @@ class TasksTestCase(unittest.TestCase):
         """
         Getting user's children. Children must be sorted alphabetically.
         """
-        justin_phone = "678762794"
         expected_output = ['George, 8', 'Marie, 17', 'Susan, 14']
         children = self.data_manager.get_children()
         result = [str(child) for child in children]

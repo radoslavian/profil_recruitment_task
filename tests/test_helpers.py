@@ -1,5 +1,4 @@
 import unittest
-from datetime import datetime
 
 from utils.helpers import normalize_telephone_num, list_files_for_import, \
     get_file_extension
