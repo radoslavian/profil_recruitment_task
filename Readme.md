@@ -67,6 +67,7 @@ Ebony, 289862947: Deanna, 3
 ```
 
 ## WARNING
+### Possible problems when logging-in
 Bash (and probably other Linux shells) interprets certain
 characters as special (e.g. !, #, $) - if login fails
 using the correct password, enter this password in
@@ -75,13 +76,17 @@ in Perl).
 
 XML entity characters (for instance &amp;amp;) must be entered
 as characters they represent - in this instance: the ampersand - &
-character. If you can not log in using correct password,
+character. If you __can not log in__ using correct password,
 check if it doesn't contain entities.
 
-Concluding: the problematic password in the form of `(UVIl#9&amp;q7`
-must be entered this way: `'(UVIl#9&q7'`
+*Concluding:* the problematic password in the form of `(UVIl#9&amp;q7`
+(note the *"&amp;amp;"* string) must be entered this way: 
+```
+$ python script.py find-similar-children-by-age --login briancollins@example.net --password '(UVIl#9&q7'
+```
+### Invalid credentials message
 
-The script (as written in the description) displays a single message:
-`Invalid Login` for both:
+The script (as specified in the original assignment description) 
+displays a single message - `Invalid Login` for both:
 * invalid login/password (which is correct)
-* insufficient priviliges to perform operation
+* insufficient privileges to perform an operation
