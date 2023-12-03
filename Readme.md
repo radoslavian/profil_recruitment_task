@@ -71,4 +71,17 @@ Bash (and probably other Linux shells) interprets certain
 characters as special (e.g. !, #, $) - if login fails
 using the correct password, enter this password in
 single quotes - __' '__ (like _literal string_
-in Perl).
+in Perl).  
+
+XML entity characters (for instance &amp;amp;) must be entered
+as characters they represent - in this instance: the ampersand - &
+character. If you can not log in using correct password,
+check if it doesn't contain entities.
+
+Concluding: the problematic password in the form of `(UVIl#9&amp;q7`
+must be entered this way: `'(UVIl#9&q7'`
+
+The script (as written in the description) displays a single message:
+`Invalid Login` for both:
+* invalid login/password (which is correct)
+* insufficient priviliges to perform operation
