@@ -1,4 +1,5 @@
 import re
+import sys
 
 from database.database_creator import DatabaseCreator
 from database.models import start_engine, drop_all, User, Child
@@ -40,6 +41,8 @@ class DataManager:
         file_extensions = [".xml", ".json", ".csv"]
         files_for_import = list_files_for_import(
             toplevel_dir, file_extensions)
+        if not files_for_import:
+            print("I did not find any files to import!", file=sys.stderr)
         self.database_creator.feed_files(files_for_import)
 
     @login_required
