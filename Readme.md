@@ -1,4 +1,3 @@
-Radosław Kuzyk, [re.kuzyk@gmail.com](mailto:re.kuzyk@gmail.com)
 ## Installation
 The scripts were written for Python version 3.11.3.  
 Once downloaded, within a script directory a virtual environment
