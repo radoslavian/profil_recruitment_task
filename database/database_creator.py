@@ -100,7 +100,6 @@ class DatabaseCreator:
                       f"(email or phone number): user {user['firstname']}",
                       file=sys.stderr)
                 self.session.rollback()
-                continue
 
     @staticmethod
     def get_importer_for_file(filename):
