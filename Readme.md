@@ -1,3 +1,5 @@
+For description of the original assignment, 
+consult the ASSIGNMENT.md
 ## Installation
 The scripts were written for Python version 3.11.3.  
 Once downloaded, within a script directory a virtual environment
