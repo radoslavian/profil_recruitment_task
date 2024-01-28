@@ -1,5 +1,5 @@
 import re
-from csv import DictReader
+import csv
 
 from data_importer.data_importer import DataImporter
 
@@ -26,11 +26,12 @@ class CSVImporter(DataImporter):
 
     def _read_rows(self, reader):
         rows = []
+        children_fieldnames = ("name", "age")
         for row in reader:
-            row["children"] = self._read_children(row["children"])
-            rows.append(row)
+            children = self._read_children(row["children"])
+            rows.append({**row, "children": children})
         return rows
 
     def import_from_file(self, file):
-        reader = DictReader(file, delimiter=";")
+        reader = csv.DictReader(file, delimiter=";")
         return self._read_rows(reader)
