@@ -29,8 +29,8 @@ class CSVImporter(DataImporter):
         for row in reader:
             row["children"] = self._read_children(row["children"])
             rows.append(row)
-        self.converted_data = rows
+        return rows
 
     def import_from_file(self, file):
         reader = DictReader(file, delimiter=";")
-        self._read_rows(reader)
+        return self._read_rows(reader)

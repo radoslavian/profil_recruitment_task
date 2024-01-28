@@ -22,7 +22,7 @@ class DataImporter:
 
     def load_data(self, filename):
         with open(filename, "r") as file:
-            self.import_from_file(file)
+            self.converted_data = self.import_from_file(file)
 
     def import_from_file(self, file):
         """
@@ -31,13 +31,4 @@ class DataImporter:
         pass
 
     def __iter__(self):
-        self.current_iter_position = 0
-        return self
-
-    def __next__(self):
-        try:
-            user = self.converted_data[self.current_iter_position]
-        except IndexError:
-            raise StopIteration
-        self.current_iter_position += 1
-        return user
+        return iter(self.converted_data)

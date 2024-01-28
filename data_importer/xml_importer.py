@@ -28,4 +28,4 @@ class XMLImporter(DataImporter):
                     data[prop.tag] = prop.text
             output.append(data)
 
-        self.converted_data = output
+        return output
